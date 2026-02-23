@@ -1,0 +1,12 @@
+name: Show Colors
+
+on:
+  workflow_dispatch:
+
+jobs:
+  show-colors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show all ANSI colors
+        run: bash show-colors.sh

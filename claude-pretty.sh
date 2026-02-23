@@ -15,8 +15,17 @@ RESULT_LIMIT="${RESULT_LIMIT:-300}"
 FILE_LINES="${FILE_LINES:-5}"
 INDENT="   "
 
-HIDE_TOOLS="Write|TodoWrite|Read|Glob|Grep|Bash|Task"
+HIDE_TOOLS="Write|TodoWrite|Read|Glob|Grep|Bash|Task|Edit|MultiEdit|NotebookEdit"
 CURRENT_TOOL=""
+SUBAGENT_DEPTH=0
+SP=""
+
+update_sp() {
+  SP=""
+  for ((i=0; i<SUBAGENT_DEPTH; i++)); do
+    SP="${SP}${DIM}│${RESET} "
+  done
+}
 
 process_json() {
   local line="$1"
@@ -46,15 +55,19 @@ process_json() {
 
       case "$event_type" in
         content_block_start)
+          if [[ $SUBAGENT_DEPTH -gt 0 ]]; then
+            echo -e "${SP}${DIM}└───────────────────────────────${RESET}"
+            ((SUBAGENT_DEPTH--))
+            update_sp
+          fi
           local block_type name
           block_type=$(echo "$line" | jq -r '.event.content_block.type // empty')
           if [[ "$block_type" == "tool_use" ]]; then
             name=$(echo "$line" | jq -r '.event.content_block.name')
             CURRENT_TOOL="$name"
             case "$name" in
-              Edit|MultiEdit) echo -ne "\n${ORANGE}[${name}] " ;;
-              Write|TodoWrite|Read|Glob|Grep|Bash|Task) ;; # hide, handled in assistant
-              *) echo -ne "\n${PURPLE}[${name}] " ;;
+              Write|TodoWrite|Read|Glob|Grep|Bash|Task|Edit|MultiEdit|NotebookEdit) ;;
+              *) echo -ne "\n${SP}${PURPLE}[${name}] " ;;
             esac
           fi
           ;;
@@ -79,7 +92,7 @@ process_json() {
           CURRENT_TOOL=""
           ;;
         error)
-          echo -e "\n${RED}[error] $(echo "$line" | jq -r '.event.error // .event | tostring')${RESET}"
+          echo -e "\n${SP}${RED}[error] $(echo "$line" | jq -r '.event.error // .event | tostring')${RESET}"
           ;;
       esac
       ;;
@@ -92,12 +105,12 @@ process_json() {
         has_file=$(echo "$line" | jq -r 'if .tool_use_result | type == "object" then .tool_use_result.file // empty else empty end' 2>/dev/null)
         if [[ -n "$has_file" && "$has_file" != "null" ]]; then
           local preview num_lines
-          num_lines=$(echo "$line" | jq -r '.tool_use_result.file.numLines')
-          preview=$(echo "$line" | jq -r --argjson n "$FILE_LINES" '.tool_use_result.file.content | split("\n") | .[0:$n] | map("'"$INDENT"'" + .) | join("\n")')
-          echo -e "${DIM}${INDENT}(${num_lines} lines)"
-          echo -e "${preview}"
-          [[ $num_lines -gt $FILE_LINES ]] && echo -e "${INDENT}..."
-          echo -e "${RESET}"
+          num_lines=$(echo "$line" | jq -r '.tool_use_result.file.numLines // 0')
+          preview=$(echo "$line" | jq -r --argjson n "$FILE_LINES" '.tool_use_result.file.content | if type == "string" then split("\n") | .[0:$n] | map("'"$INDENT"'" + .) | join("\n") else "'"$INDENT"'" + tostring[0:200] end' 2>/dev/null || echo "${INDENT}(binary/structured content)")
+          echo -e "${SP}${DIM}${INDENT}(${num_lines} lines)"
+          echo -e "${SP}${preview}"
+          [[ "$num_lines" =~ ^[0-9]+$ && $num_lines -gt $FILE_LINES ]] && echo -e "${SP}${INDENT}..."
+          echo -e "${SP}${RESET}"
         else
           content=$(echo "$line" | jq -r '.message.content[0].content // "no content"')
           if [[ "$content" =~ ^(Todos\ have\ been|The\ file.*has\ been) ]]; then
@@ -105,19 +118,19 @@ process_json() {
           elif [[ "$content" =~ \<tool_use_error\> ]]; then
             local error_msg
             error_msg=$(echo "$content" | sed 's/<[^>]*>//g')
-            echo -e "${RED}${INDENT}✗ ${error_msg}${RESET}\n"
+            echo -e "${SP}${RED}${INDENT}✗ ${error_msg}${RESET}\n"
           elif echo "$content" | jq -e 'type == "array"' &>/dev/null; then
             local parsed
             parsed=$(echo "$content" | jq -r 'map(select(.type? == "text") | .text) | first // "" | gsub("<usage>[^<]*</usage>"; "") | gsub("\n"; " ")')
-            echo -e "${CYAN}${INDENT}→ ${parsed:0:$RESULT_LIMIT}${RESET}\n"
+            echo -e "${SP}${CYAN}${INDENT}→ ${parsed:0:$RESULT_LIMIT}${RESET}\n"
           elif [[ "$content" == *$'\n'* ]]; then
             echo "$content" | head -10 | while IFS= read -r l; do
-              echo -e "${CYAN}${INDENT}→ ${l}${RESET}"
+              echo -e "${SP}${CYAN}${INDENT}→ ${l}${RESET}"
             done
-            [[ $(echo "$content" | wc -l) -gt 10 ]] && echo -e "${INDENT}..."
+            [[ $(echo "$content" | wc -l) -gt 10 ]] && echo -e "${SP}${INDENT}..."
             echo ""
           else
-            echo -e "${CYAN}${INDENT}→ ${content:0:$RESULT_LIMIT}${RESET}\n"
+            echo -e "${SP}${CYAN}${INDENT}→ ${content:0:$RESULT_LIMIT}${RESET}\n"
           fi
         fi
       fi
@@ -126,10 +139,10 @@ process_json() {
     assistant)
       # Handle TodoWrite
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "TodoWrite")' &>/dev/null; then
-        echo -e "\n${YELLOW}[Todo]${RESET}"
-        echo "$line" | jq -r --arg g "$GREEN" --arg o "$ORANGE" --arg d "$DIM" --arg r "$RESET" --arg i "$INDENT" '
+        echo -e "\n${SP}${YELLOW}[Todo]${RESET}"
+        echo "$line" | jq -r --arg g "$GREEN" --arg o "$ORANGE" --arg d "$DIM" --arg r "$RESET" --arg i "$INDENT" --arg sp "$SP" '
           .message.content[] | select(.type == "tool_use" and .name == "TodoWrite") | .input.todos[] |
-          $i + (if .status == "completed" then $g + "[x]" elif .status == "in_progress" then $o + "[~]" else $d + "[ ]" end) + $r + " " + .content
+          $sp + $i + (if .status == "completed" then $g + "[x]" elif .status == "in_progress" then $o + "[~]" else $d + "[ ]" end) + $r + " " + .content
         '
         echo ""
       fi
@@ -137,19 +150,19 @@ process_json() {
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Write")' &>/dev/null; then
         local file_path
         file_path=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Write") | .input.file_path')
-        echo -e "\n${ORANGE}[Write] ${file_path}${RESET}"
+        echo -e "\n${SP}${ORANGE}[Write] ${file_path}${RESET}"
       fi
       # Handle Read
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Read")' &>/dev/null; then
         local file_path
         file_path=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Read") | .input.file_path')
-        echo -e "\n${GREEN}[Read] ${file_path}${RESET}"
+        echo -e "\n${SP}${GREEN}[Read] ${file_path}${RESET}"
       fi
       # Handle Glob
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Glob")' &>/dev/null; then
         local pattern
         pattern=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Glob") | .input.pattern')
-        echo -e "\n${PURPLE}[Glob] ${pattern}${RESET}"
+        echo -e "\n${SP}${PURPLE}[Glob] ${pattern}${RESET}"
       fi
       # Handle Grep
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Grep")' &>/dev/null; then
@@ -157,31 +170,52 @@ process_json() {
         pattern=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Grep") | .input.pattern')
         path=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Grep") | .input.path // empty')
         if [[ -n "$path" ]]; then
-          echo -e "\n${PURPLE}[Grep] \"${pattern}\" in ${path##*/}${RESET}"
+          echo -e "\n${SP}${PURPLE}[Grep] \"${pattern}\" in ${path##*/}${RESET}"
         else
-          echo -e "\n${PURPLE}[Grep] \"${pattern}\"${RESET}"
+          echo -e "\n${SP}${PURPLE}[Grep] \"${pattern}\"${RESET}"
         fi
+      fi
+      # Handle Edit
+      if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and (.name == "Edit" or .name == "MultiEdit"))' &>/dev/null; then
+        local edit_name edit_file
+        edit_name=$(echo "$line" | jq -r '[.message.content[] | select(.type == "tool_use" and (.name == "Edit" or .name == "MultiEdit"))][0].name')
+        edit_file=$(echo "$line" | jq -r '[.message.content[] | select(.type == "tool_use" and (.name == "Edit" or .name == "MultiEdit"))][0].input.file_path')
+        echo -e "\n${SP}${ORANGE}[${edit_name}] ${edit_file}${RESET}"
+      fi
+      # Handle NotebookEdit
+      if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "NotebookEdit")' &>/dev/null; then
+        local nb_path
+        nb_path=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "NotebookEdit") | .input.notebook_path')
+        echo -e "\n${SP}${ORANGE}[NotebookEdit] ${nb_path}${RESET}"
       fi
       # Handle Bash
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Bash")' &>/dev/null; then
         local command
         command=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Bash") | .input.command')
-        echo -e "\n${PURPLE}[Bash] ${command}${RESET}"
+        echo -e "\n${SP}${PURPLE}[Bash] ${command}${RESET}"
       fi
       # Handle Task
       if echo "$line" | jq -e '.message.content[]? | select(.type == "tool_use" and .name == "Task")' &>/dev/null; then
         local prompt model
         prompt=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Task") | .input.prompt // .input.description')
         model=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Task") | .input.model // "sonnet"')
-        echo -e "\n${BLUE}[Task] \"${prompt:0:50}\" (${model})${RESET}"
+        echo -e "\n${SP}${BLUE}[Task] \"${prompt:0:50}\" (${model})${RESET}"
+        ((SUBAGENT_DEPTH++))
+        update_sp
+        echo -e "${SP}${DIM}┌───────────────────────────────${RESET}"
       fi
       ;;
 
     error)
-      echo -e "\n${RED}[error] $(echo "$line" | jq -r '.error // "unknown error"')${RESET}"
+      echo -e "\n${SP}${RED}[error] $(echo "$line" | jq -r '.error // "unknown error"')${RESET}"
       ;;
 
     result)
+      while [[ $SUBAGENT_DEPTH -gt 0 ]]; do
+        echo -e "${SP}${DIM}└───────────────────────────────${RESET}"
+        ((SUBAGENT_DEPTH--))
+        update_sp
+      done
       local is_error
       is_error=$(echo "$line" | jq -r '.is_error')
       if [[ "$is_error" == "true" ]]; then

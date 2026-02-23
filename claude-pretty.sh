@@ -57,7 +57,7 @@ process_json() {
         content_block_start)
           if [[ $SUBAGENT_DEPTH -gt 0 ]]; then
             echo -e "${SP}${DIM}└───────────────────────────────${RESET}"
-            ((SUBAGENT_DEPTH--))
+            ((SUBAGENT_DEPTH--)) || true
             update_sp
           fi
           local block_type name
@@ -200,7 +200,7 @@ process_json() {
         prompt=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Task") | .input.prompt // .input.description')
         model=$(echo "$line" | jq -r '.message.content[] | select(.type == "tool_use" and .name == "Task") | .input.model // "sonnet"')
         echo -e "\n${SP}${BLUE}[Task] \"${prompt:0:50}\" (${model})${RESET}"
-        ((SUBAGENT_DEPTH++))
+        ((++SUBAGENT_DEPTH))
         update_sp
         echo -e "${SP}${DIM}┌───────────────────────────────${RESET}"
       fi
@@ -213,7 +213,7 @@ process_json() {
     result)
       while [[ $SUBAGENT_DEPTH -gt 0 ]]; do
         echo -e "${SP}${DIM}└───────────────────────────────${RESET}"
-        ((SUBAGENT_DEPTH--))
+        ((SUBAGENT_DEPTH--)) || true
         update_sp
       done
       local is_error

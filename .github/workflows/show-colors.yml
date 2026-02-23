@@ -18,6 +18,32 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Run claude-pretty with test prompt
+        continue-on-error: true
+        timeout-minutes: 10
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-        run: bash claude-pretty.sh -p "$(cat test-prompt.md)"
+        run: |
+          bash claude-pretty.sh -p "$(cat test-prompt.md)" 2>&1 | tee /tmp/pretty-output.txt || true
+          cp ~/.claude/projects/*/$(ls -t ~/.claude/projects/*/ 2>/dev/null | head -1) /tmp/session.jsonl 2>/dev/null || true
+
+      - name: Capture raw stream-json
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude --print --verbose --dangerously-skip-permissions \
+            --model "${CLAUDE_MODEL:-claude-sonnet-4-20250514}" \
+            --output-format stream-json --include-partial-messages \
+            -p "$(cat test-prompt.md)" > /tmp/debug-stream.jsonl 2>&1 || true
+
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-output
+          path: |
+            /tmp/pretty-output.txt
+            /tmp/debug-stream.jsonl
+            /tmp/session.jsonl
+          retention-days: 7

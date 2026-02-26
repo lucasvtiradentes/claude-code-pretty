@@ -20,6 +20,10 @@ Options:
   -h, --help         Show this help
   -v, --version      Show version
 
+Environment:
+  CP_TOOL_RESULT_MAX_CHARS   Max chars for tool results (default: 300, 0=hide)
+  CP_READ_PREVIEW_LINES      Lines to preview from Read (default: 5, 0=hide)
+
 Examples:
   {CLI_NAME} -p "explain this code"
   {CLI_NAME} -f ~/.claude/projects/.../session.jsonl

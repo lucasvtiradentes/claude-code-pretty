@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from claudepretty.colors import BLUE, CYAN, DIM, GREEN, ORANGE, PURPLE, RED, RESET, YELLOW
-from claudepretty.constants import FILE_LINES, HIDE_TOOLS, INDENT, RESULT_LIMIT
+from claudepretty.constants import READ_PREVIEW_LINES, HIDE_TOOLS, INDENT, TOOL_RESULT_MAX_CHARS
 
 
 @dataclass
@@ -148,14 +148,19 @@ def _handle_user_message(data: dict, state: ParserState, result: ParseResult):
                 return
 
             if "\n" in tool_content:
-                lines = tool_content.split("\n")[:10]
+                if READ_PREVIEW_LINES == 0:
+                    return
+                lines = tool_content.split("\n")[:READ_PREVIEW_LINES]
                 for line in lines:
                     result.add(f"{state.sp}{CYAN}{INDENT}→ {line}{RESET}\n")
-                if len(tool_content.split("\n")) > 10:
+                if len(tool_content.split("\n")) > READ_PREVIEW_LINES:
                     result.add(f"{state.sp}{INDENT}...\n")
                 result.add("\n")
             else:
-                result.add(f"{state.sp}{CYAN}{INDENT}→ {tool_content[:RESULT_LIMIT]}{RESET}\n\n")
+                if TOOL_RESULT_MAX_CHARS == 0:
+                    return
+                text = tool_content if TOOL_RESULT_MAX_CHARS < 0 else tool_content[:TOOL_RESULT_MAX_CHARS]
+                result.add(f"{state.sp}{CYAN}{INDENT}→ {text}{RESET}\n\n")
 
 
 def _handle_assistant_message(data: dict, state: ParserState, result: ParseResult):

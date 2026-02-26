@@ -18,6 +18,13 @@ claude-pretty -p "explain this code"
 claude-pretty -f ~/.claude/projects/.../session.jsonl
 ```
 
+## Environment
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| CP_TOOL_RESULT_MAX_CHARS | 300 | Max chars for tool results (0=hide) |
+| CP_READ_PREVIEW_LINES | 5 | Lines to preview from Read (0=hide) |
+
 ## Output
 
 ```

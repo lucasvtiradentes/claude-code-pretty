@@ -3,15 +3,15 @@
 Pretty formatter for Claude Code - stream sessions in real-time or replay saved .jsonl files.
 
 ```
-         claude --output-format stream-json
-                         │
-                         ▼
-              ┌─────────────────┐
-              │  claude-code-   │
-              │     pretty      │
-              └────────┬────────┘
-                       │
-                       ▼
+   claude --output-format stream-json
+                  │
+                  ▼
+         ┌─────────────────┐
+         │  claude-code-   │
+         │     pretty      │
+         └────────┬────────┘
+                  │
+                  ▼
 ┌──────────────────────────────────────┐
 │ [session]                            │
 │    id:    abc-123                    │

@@ -49,6 +49,7 @@ def bold(text: str) -> str:
 
 def render_markdown(text: str) -> str:
     import re
+
     text = re.sub(r"\*\*(.+?)\*\*", rf"{BOLD}\1{RESET}", text)
     text = re.sub(r"__(.+?)__", rf"{BOLD}\1{RESET}", text)
     text = re.sub(r"`([^`]+)`", rf"{INVERSE}\1{RESET}", text)

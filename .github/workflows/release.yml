@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install bump2version hatch
+      - run: pip install --upgrade pip bump2version hatch virtualenv
 
       - name: Configure git
         run: |

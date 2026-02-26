@@ -52,8 +52,9 @@ make install      # setup venv + install
 make test         # run pytest
 make check        # ruff lint
 
-# dev alias
-ln -sf $(pwd)/.venv/bin/claudep ~/.local/bin/claudepd
+# dev alias (claudepd)
+ln -sf $(pwd)/.venv/bin/claudep ~/.local/bin/claudepd # install
+rm ~/.local/bin/claudepd                              # remove
 ```
 
 ## License

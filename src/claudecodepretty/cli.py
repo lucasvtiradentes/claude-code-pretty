@@ -23,8 +23,7 @@ Environment:
 
 Examples:
   {CLI_NAME} -p "explain this code"
-  {CLI_NAME} -f ~/.claude/projects/.../session.jsonl
-  cat session.jsonl | {CLI_NAME} -f -""")
+  {CLI_NAME} -f ~/.claude/projects/.../session.jsonl""")
 
 
 def main():

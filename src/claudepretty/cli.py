@@ -4,7 +4,7 @@ import sys
 
 from claudepretty import __version__
 from claudepretty.colors import DIM, RESET
-from claudepretty.constants import CLI_NAME, DEFAULT_MODEL
+from claudepretty.constants import CLI_NAME
 from claudepretty.parser import ParserState, parse_json_line
 
 
@@ -20,9 +20,6 @@ Options:
   -h, --help         Show this help
   -v, --version      Show version
 
-Environment:
-  CLAUDE_MODEL       Model to use (default: {DEFAULT_MODEL})
-
 Examples:
   {CLI_NAME} -p "explain this code"
   {CLI_NAME} -f ~/.claude/projects/.../session.jsonl
@@ -30,13 +27,11 @@ Examples:
 
 
 def run_stream(args: list[str]):
-    model = os.environ.get("CLAUDE_MODEL", DEFAULT_MODEL)
     cmd = [
         "claude",
         "--print",
         "--verbose",
         "--dangerously-skip-permissions",
-        "--model", model,
         "--output-format", "stream-json",
         "--include-partial-messages",
         *args,

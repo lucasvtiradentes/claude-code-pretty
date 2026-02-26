@@ -18,12 +18,17 @@ claude-pretty -p "explain this code"
 claude-pretty -f ~/.claude/projects/.../session.jsonl
 ```
 
+Stream mode runs claude with these flags automatically:
+```
+--print --verbose --dangerously-skip-permissions --output-format stream-json --include-partial-messages
+```
+
 ## Environment
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| CP_TOOL_RESULT_MAX_CHARS | 300 | Max chars for tool results (0=hide) |
-| CP_READ_PREVIEW_LINES | 5 | Lines to preview from Read (0=hide) |
+| Variable                 | Default | Description                         |
+|--------------------------|---------|-------------------------------------|
+| CP_TOOL_RESULT_MAX_CHARS | 300     | Max chars for tool results (0=hide) |
+| CP_READ_PREVIEW_LINES    | 5       | Lines to preview from Read (0=hide) |
 
 ## Output
 

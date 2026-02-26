@@ -2,9 +2,16 @@
 
 Pretty formatter for Claude Code - stream sessions in real-time or replay saved .jsonl files.
 
-<div align="center">
-   <img src=".github/images/demo.png" width="70%">
-</div>
+<table align="center">
+  <tr>
+    <th>without claude-code-pretty</th>
+    <th>with claude-code-pretty</th>
+  </tr>
+  <tr>
+    <td><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/claude-code-pretty@main/.github/images/without-using.png" width="400"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/claude-code-pretty@main/.github/images/demo.png" width="400"></td>
+  </tr>
+</table>
 
 ## Features
 

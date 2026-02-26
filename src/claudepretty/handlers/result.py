@@ -21,4 +21,5 @@ def handle_result(data: dict, state: ParserState, result: ParseResult):
             usage.get("cache_creation_input_tokens", 0),
         ])
         output_tokens = usage.get("output_tokens", 0)
-        result.add(f"\n{DIM}[done] {duration}s, ${cost}, {turns} turns, {input_tokens} in / {output_tokens} out{RESET}\n")
+        stats = f"{duration}s, ${cost}, {turns} turns, {input_tokens} in / {output_tokens} out"
+        result.add(f"\n{DIM}[done] {stats}{RESET}\n")

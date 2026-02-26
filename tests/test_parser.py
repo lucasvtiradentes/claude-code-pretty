@@ -127,7 +127,7 @@ def test_parse_task_increments_depth():
             ]
         },
     })
-    result = parse_json_line(line, state)
+    parse_json_line(line, state)
 
     assert state.subagent_depth == 1
     assert "│" in state.sp

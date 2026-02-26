@@ -1,6 +1,6 @@
 import re
 
-from claudecodepretty.colors import CYAN, DIM, GREEN, RED, RESET
+from claudecodepretty.colors import DIM, GREEN, RED, RESET
 from claudecodepretty.constants import INDENT, READ_PREVIEW_LINES, TOOL_RESULT_MAX_CHARS
 from claudecodepretty.handlers.base import ParseResult, ParserState
 
@@ -40,7 +40,7 @@ def handle_user_message(data: dict, state: ParserState, result: ParseResult):
                     return
                 lines = tool_content.split("\n")[:READ_PREVIEW_LINES]
                 for line in lines:
-                    result.add(f"{state.sp}{CYAN}{INDENT}→ {line}{RESET}\n")
+                    result.add(f"{state.sp}{DIM}{INDENT}→ {line}{RESET}\n")
                 if len(tool_content.split("\n")) > READ_PREVIEW_LINES:
                     result.add(f"{state.sp}{INDENT}...\n")
                 result.add("\n")
@@ -48,4 +48,4 @@ def handle_user_message(data: dict, state: ParserState, result: ParseResult):
                 if TOOL_RESULT_MAX_CHARS == 0:
                     return
                 text = tool_content if TOOL_RESULT_MAX_CHARS < 0 else tool_content[:TOOL_RESULT_MAX_CHARS]
-                result.add(f"{state.sp}{CYAN}{INDENT}→ {text}{RESET}\n\n")
+                result.add(f"{state.sp}{DIM}{INDENT}→ {text}{RESET}\n\n")

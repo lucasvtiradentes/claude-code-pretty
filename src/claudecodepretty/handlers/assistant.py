@@ -1,3 +1,4 @@
+from claudecodepretty.colors import render_markdown
 from claudecodepretty.handlers.base import ParseResult, ParserState
 from claudecodepretty.handlers.tools import dispatch_tool
 
@@ -12,7 +13,7 @@ def handle_assistant_message(data: dict, state: ParserState, result: ParseResult
     if state.mode == "replay":
         for block in content:
             if block.get("type") == "text":
-                result.add(block.get("text", ""))
+                result.add(render_markdown(block.get("text", "")))
 
     for block in content:
         if block.get("type") != "tool_use":

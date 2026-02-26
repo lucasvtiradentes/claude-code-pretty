@@ -1,10 +1,11 @@
+BOLD = "\033[1m"
 GREEN = "\033[32m"
 ORANGE = "\033[33m"
 PURPLE = "\033[35m"
 CYAN = "\033[36m"
 BLUE = "\033[34m"
 YELLOW = "\033[93m"
-DIM = "\033[2m"
+DIM = "\033[90m"
 RED = "\033[31m"
 RESET = "\033[0m"
 
@@ -39,3 +40,14 @@ def dim(text: str) -> str:
 
 def red(text: str) -> str:
     return f"{RED}{text}{RESET}"
+
+
+def bold(text: str) -> str:
+    return f"{BOLD}{text}{RESET}"
+
+
+def render_markdown(text: str) -> str:
+    import re
+    text = re.sub(r"\*\*(.+?)\*\*", rf"{BOLD}\1{RESET}", text)
+    text = re.sub(r"__(.+?)__", rf"{BOLD}\1{RESET}", text)
+    return text

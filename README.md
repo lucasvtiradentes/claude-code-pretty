@@ -63,7 +63,7 @@ make test         # run pytest
 make check        # ruff lint
 
 # dev alias
-ln -sf $(pwd)/.venv/bin/claudep ~/.local/bin/claudep-dev
+ln -sf $(pwd)/.venv/bin/claudep ~/.local/bin/claudepd
 ```
 
 ## License

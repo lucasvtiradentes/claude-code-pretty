@@ -9,3 +9,4 @@ build/
 *.egg
 .eggs/
 .ignore/
+tmp-*

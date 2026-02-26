@@ -24,7 +24,7 @@ def handle_stream_event(data: dict, state: ParserState, result: ParseResult):
         delta_type = delta.get("type", "")
 
         if delta_type == "text_delta":
-            result.add_inline(delta.get("text", ""))
+            result.add_inline(state.render_text(delta.get("text", "")))
         elif delta_type == "input_json_delta":
             if state.current_tool not in HIDE_TOOLS:
                 result.add_inline(delta.get("partial_json", ""))

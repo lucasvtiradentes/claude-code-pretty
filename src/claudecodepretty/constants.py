@@ -1,7 +1,7 @@
 import os
 
-CLI_NAME = "claude-pretty"
-DIST_NAME = "claude-pretty"
+CLI_NAME = "claudep"
+DIST_NAME = "claude-code-pretty"
 INDENT = "   "
 HIDE_TOOLS = {"Write", "TodoWrite", "Read", "Glob", "Grep", "Bash", "Task", "Edit", "MultiEdit", "NotebookEdit"}
 

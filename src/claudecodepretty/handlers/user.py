@@ -1,8 +1,8 @@
 import re
 
-from claudepretty.colors import CYAN, DIM, GREEN, RED, RESET
-from claudepretty.constants import INDENT, READ_PREVIEW_LINES, TOOL_RESULT_MAX_CHARS
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import CYAN, DIM, GREEN, RED, RESET
+from claudecodepretty.constants import INDENT, READ_PREVIEW_LINES, TOOL_RESULT_MAX_CHARS
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_user_message(data: dict, state: ParserState, result: ParseResult):

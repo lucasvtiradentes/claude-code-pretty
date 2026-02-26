@@ -1,6 +1,6 @@
-from claudepretty.colors import DIM, PURPLE, RED, RESET
-from claudepretty.constants import HIDE_TOOLS
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import DIM, PURPLE, RED, RESET
+from claudecodepretty.constants import HIDE_TOOLS
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_stream_event(data: dict, state: ParserState, result: ParseResult):

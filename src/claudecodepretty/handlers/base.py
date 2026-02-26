@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from claudepretty.colors import DIM, RESET
+from claudecodepretty.colors import DIM, RESET
 
 
 @dataclass

@@ -1,5 +1,5 @@
-from claudepretty.colors import BLUE, DIM, RESET
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import BLUE, DIM, RESET
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_task(inp: dict, state: ParserState, result: ParseResult):

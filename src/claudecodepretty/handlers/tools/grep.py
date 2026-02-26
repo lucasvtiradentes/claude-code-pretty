@@ -1,5 +1,5 @@
-from claudepretty.colors import PURPLE, RESET
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import PURPLE, RESET
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_grep(inp: dict, state: ParserState, result: ParseResult):

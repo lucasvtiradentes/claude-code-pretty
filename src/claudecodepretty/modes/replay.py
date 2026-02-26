@@ -1,9 +1,9 @@
 import os
 import sys
 
-from claudepretty.colors import DIM, RESET
-from claudepretty.handlers import ParserState
-from claudepretty.parser import parse_json_line
+from claudecodepretty.colors import DIM, RESET
+from claudecodepretty.handlers import ParserState
+from claudecodepretty.parser import parse_json_line
 
 
 def run_replay(file_path: str) -> int:

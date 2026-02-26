@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "claude-pretty"
+name = "claude-code-pretty"
 version = "0.1.0"
 description = "Pretty formatter for Claude Code stream-json output"
 readme = "README.md"
@@ -27,18 +27,20 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/lucasvtiradentes/cc-utils"
-Repository = "https://github.com/lucasvtiradentes/cc-utils"
-Issues = "https://github.com/lucasvtiradentes/cc-utils/issues"
+Homepage = "https://github.com/lucasvtiradentes/claude-code-pretty"
+Repository = "https://github.com/lucasvtiradentes/claude-code-pretty"
+Issues = "https://github.com/lucasvtiradentes/claude-code-pretty/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "ruff>=0.9", "pre-commit>=4"]
 
 [project.scripts]
-claude-pretty = "claudepretty.cli:main"
+claudep = "claudecodepretty.cli:main"
+ccp = "claudecodepretty.cli:main"
+claude-code-pretty = "claudecodepretty.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/claudepretty"]
+packages = ["src/claudecodepretty"]
 
 [tool.hatch.build.targets.wheel.sources]
 "src" = ""

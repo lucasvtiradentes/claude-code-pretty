@@ -1,21 +1,23 @@
-# claude-pretty
+# claude-code-pretty
 
-Pretty formatter for Claude Code sessions - works both for real-time streaming and replaying old session files (.jsonl).
+Human-readable output for Claude Code. Stream sessions in real-time or replay saved .jsonl files.
 
 ## Installation
 
 ```bash
-pip install claude-pretty
+pip install claude-code-pretty
 ```
+
+Aliases: `claudep`, `ccp`, `claude-code-pretty`
 
 ## Usage
 
 ```bash
 # stream mode - run claude with pretty output
-claude-pretty -p "explain this code"
+claudep -p "explain this code"
 
 # replay mode - replay a saved session
-claude-pretty -f ~/.claude/projects/.../session.jsonl
+claudep -f ~/.claude/projects/.../session.jsonl
 ```
 
 Stream mode runs claude with these flags automatically:
@@ -61,7 +63,7 @@ make test         # run pytest
 make check        # ruff lint
 
 # dev alias
-ln -sf $(pwd)/.venv/bin/claude-pretty ~/.local/bin/claude-pretty-dev
+ln -sf $(pwd)/.venv/bin/claudep ~/.local/bin/claudep-dev
 ```
 
 ## License

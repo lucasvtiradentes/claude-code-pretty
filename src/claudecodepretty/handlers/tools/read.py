@@ -1,5 +1,5 @@
-from claudepretty.colors import GREEN, RESET
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import GREEN, RESET
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_read(inp: dict, state: ParserState, result: ParseResult):

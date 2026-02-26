@@ -1,8 +1,8 @@
 import sys
 
-from claudepretty import __version__
-from claudepretty.constants import CLI_NAME
-from claudepretty.modes import run_replay, run_stream
+from claudecodepretty import __version__
+from claudecodepretty.constants import CLI_NAME
+from claudecodepretty.modes import run_replay, run_stream
 
 
 def print_help():

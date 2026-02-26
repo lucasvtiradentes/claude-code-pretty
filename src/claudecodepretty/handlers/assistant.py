@@ -1,5 +1,5 @@
-from claudepretty.handlers.base import ParseResult, ParserState
-from claudepretty.handlers.tools import dispatch_tool
+from claudecodepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.handlers.tools import dispatch_tool
 
 
 def handle_assistant_message(data: dict, state: ParserState, result: ParseResult):

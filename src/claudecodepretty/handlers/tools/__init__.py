@@ -1,13 +1,13 @@
-from claudepretty.handlers.base import ParseResult, ParserState
-from claudepretty.handlers.tools.bash import handle_bash
-from claudepretty.handlers.tools.edit import handle_edit
-from claudepretty.handlers.tools.glob import handle_glob
-from claudepretty.handlers.tools.grep import handle_grep
-from claudepretty.handlers.tools.notebook import handle_notebook
-from claudepretty.handlers.tools.read import handle_read
-from claudepretty.handlers.tools.task import handle_task
-from claudepretty.handlers.tools.todo import handle_todo
-from claudepretty.handlers.tools.write import handle_write
+from claudecodepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.handlers.tools.bash import handle_bash
+from claudecodepretty.handlers.tools.edit import handle_edit
+from claudecodepretty.handlers.tools.glob import handle_glob
+from claudecodepretty.handlers.tools.grep import handle_grep
+from claudecodepretty.handlers.tools.notebook import handle_notebook
+from claudecodepretty.handlers.tools.read import handle_read
+from claudecodepretty.handlers.tools.task import handle_task
+from claudecodepretty.handlers.tools.todo import handle_todo
+from claudecodepretty.handlers.tools.write import handle_write
 
 
 def dispatch_tool(name: str, inp: dict, state: ParserState, result: ParseResult):

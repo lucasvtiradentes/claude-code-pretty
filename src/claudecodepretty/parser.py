@@ -1,7 +1,7 @@
 import json
 
-from claudepretty.colors import RED, RESET
-from claudepretty.handlers import (
+from claudecodepretty.colors import RED, RESET
+from claudecodepretty.handlers import (
     ParseResult,
     ParserState,
     handle_assistant_message,

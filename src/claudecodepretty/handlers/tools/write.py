@@ -1,5 +1,5 @@
-from claudepretty.colors import ORANGE, RESET
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import ORANGE, RESET
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_write(inp: dict, state: ParserState, result: ParseResult):

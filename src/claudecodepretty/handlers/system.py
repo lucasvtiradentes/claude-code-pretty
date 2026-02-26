@@ -1,6 +1,6 @@
-from claudepretty.colors import DIM, RESET
-from claudepretty.constants import INDENT
-from claudepretty.handlers.base import ParseResult, ParserState
+from claudecodepretty.colors import DIM, RESET
+from claudecodepretty.constants import INDENT
+from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_system(data: dict, state: ParserState, result: ParseResult):

@@ -1,6 +1,6 @@
 import json
 
-from claudepretty.parser import ParserState, parse_json_line
+from claudecodepretty.parser import ParserState, parse_json_line
 
 
 def test_parse_system_init():

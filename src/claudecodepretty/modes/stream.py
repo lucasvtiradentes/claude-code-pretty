@@ -1,8 +1,8 @@
 import subprocess
 import sys
 
-from claudepretty.handlers import ParserState
-from claudepretty.parser import parse_json_line
+from claudecodepretty.handlers import ParserState
+from claudecodepretty.parser import parse_json_line
 
 
 def run_stream(args: list[str]) -> int:

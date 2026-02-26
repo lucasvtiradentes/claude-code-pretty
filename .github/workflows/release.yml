@@ -45,15 +45,15 @@ jobs:
         id: version
         run: echo "version=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")" >> "$GITHUB_OUTPUT"
 
+      - name: Build
+        run: hatch build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
       - name: Commit and tag
         run: |
           git add -A
           git commit -m "chore: release v${{ steps.version.outputs.version }}" || true
           git tag "v${{ steps.version.outputs.version }}"
           git push origin main --tags
-
-      - name: Build
-        run: hatch build
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1

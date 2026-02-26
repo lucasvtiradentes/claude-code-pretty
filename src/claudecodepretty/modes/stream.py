@@ -11,7 +11,8 @@ def run_stream(args: list[str]) -> int:
         "--print",
         "--verbose",
         "--dangerously-skip-permissions",
-        "--output-format", "stream-json",
+        "--output-format",
+        "stream-json",
         "--include-partial-messages",
         *args,
     ]

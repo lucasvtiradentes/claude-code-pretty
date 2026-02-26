@@ -15,11 +15,13 @@ def handle_result(data: dict, state: ParserState, result: ParseResult):
         cost = f"{data.get('total_cost_usd', 0):.4f}"
         turns = data.get("num_turns", 0)
         usage = data.get("usage", {})
-        input_tokens = sum([
-            usage.get("input_tokens", 0),
-            usage.get("cache_read_input_tokens", 0),
-            usage.get("cache_creation_input_tokens", 0),
-        ])
+        input_tokens = sum(
+            [
+                usage.get("input_tokens", 0),
+                usage.get("cache_read_input_tokens", 0),
+                usage.get("cache_creation_input_tokens", 0),
+            ]
+        )
         output_tokens = usage.get("output_tokens", 0)
         stats = f"{duration}s, ${cost}, {turns} turns, {input_tokens} in / {output_tokens} out"
         result.add(f"\n{DIM}[done] {stats}{RESET}\n")

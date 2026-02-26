@@ -1,6 +1,55 @@
 # claude-code-pretty
 
-Human-readable output for Claude Code. Stream sessions in real-time or replay saved .jsonl files.
+Pretty formatter for Claude Code - stream sessions in real-time or replay saved .jsonl files.
+
+```
+         claude --output-format stream-json
+                         │
+                         ▼
+              ┌─────────────────┐
+              │  claude-code-   │
+              │     pretty      │
+              └────────┬────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────┐
+│ [session]                            │
+│    id:    abc-123                    │
+│    model: sonnet                     │
+│                                      │
+│ **Step 1:** Finding files...         │
+│                                      │
+│ [Glob] *.py                          │
+│    → main.py, utils.py               │
+│                                      │
+│ [Read] main.py                       │
+│    → def hello():                    │
+│    →     print("world")              │
+│    → ...                             │
+│                                      │
+│ [Bash] python main.py                │
+│    → world                           │
+│                                      │
+│ [Edit] main.py                       │
+│    → replaced `print` with `log`     │
+│                                      │
+│ [Task] running subagent...           │
+│ │ [Grep] "TODO"                      │
+│ │    → Found 3 matches               │
+│ └────────────────────────────────    │
+│                                      │
+│ [done] 5.2s, $0.03, 2 turns          │
+└──────────────────────────────────────┘
+```
+
+## Features
+
+- stream mode    - run claude with pretty output in real-time
+- replay mode    - replay saved .jsonl session files
+- tool display   - formatted output for Glob, Grep, Bash, Read, Edit, etc.
+- markdown       - renders **bold** and `code` with ANSI styles
+- subagent depth - visual indentation for nested Task calls
+- cost tracking  - shows duration, cost, tokens per session
 
 ## Installation
 

@@ -1,4 +1,5 @@
 BOLD = "\033[1m"
+INVERSE = "\033[7m"
 GREEN = "\033[32m"
 ORANGE = "\033[33m"
 PURPLE = "\033[35m"
@@ -50,4 +51,5 @@ def render_markdown(text: str) -> str:
     import re
     text = re.sub(r"\*\*(.+?)\*\*", rf"{BOLD}\1{RESET}", text)
     text = re.sub(r"__(.+?)__", rf"{BOLD}\1{RESET}", text)
+    text = re.sub(r"`([^`]+)`", rf"{INVERSE}\1{RESET}", text)
     return text

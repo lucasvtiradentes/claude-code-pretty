@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install --upgrade pip bump2version hatch virtualenv
+      - run: pip install --upgrade pip bump2version build
 
       - name: Configure git
         run: |
@@ -46,7 +46,7 @@ jobs:
         run: echo "version=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")" >> "$GITHUB_OUTPUT"
 
       - name: Build
-        run: hatch build
+        run: python -m build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

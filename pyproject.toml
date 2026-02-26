@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "claude-pretty"
+version = "0.1.0"
+description = "Pretty formatter for Claude Code stream-json output"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [{ name = "lucasvtiradentes" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development",
+]
+
+[project.urls]
+Homepage = "https://github.com/lucasvtiradentes/cc-utils"
+Repository = "https://github.com/lucasvtiradentes/cc-utils"
+Issues = "https://github.com/lucasvtiradentes/cc-utils/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.9"]
+
+[project.scripts]
+claude-pretty = "claudepretty.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/claudepretty"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

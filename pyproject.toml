@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-code-pretty"
-version = "0.1.0"
+version = "0.1.1"
 description = "Pretty formatter for Claude Code stream-json output"
 readme = "README.md"
 requires-python = ">=3.9"

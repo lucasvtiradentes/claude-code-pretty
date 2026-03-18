@@ -15,7 +15,7 @@ test:
 	.venv/bin/pytest -v
 
 test-replay:
-	.venv/bin/claudep -f tests/fixtures/sample_session.jsonl
+	.venv/bin/claudep show tests/fixtures/sample_session.jsonl
 
 build:
 	.venv/bin/pip install hatch

@@ -2,18 +2,20 @@ import sys
 
 from claudecodepretty import __version__
 from claudecodepretty.constants import CLI_NAME
-from claudecodepretty.modes import run_replay, run_stream
 
 
 def print_help():
     print(f"""{CLI_NAME} - Pretty formatter for Claude Code stream-json output
 
 Usage:
-  {CLI_NAME} [OPTIONS] [CLAUDE_ARGS...]
-  {CLI_NAME} -f <session.jsonl>
+  {CLI_NAME} <command> [options]
+
+Commands:
+  stream [claude-args...]          Run claude with pretty output (forwards all args)
+  show <file.jsonl> [--browser]    Replay a saved session (.jsonl)
+  sessions [--port N]              Browse all sessions in browser
 
 Options:
-  -f, --file FILE    Replay a saved session .jsonl file
   -h, --help         Show this help
   -v, --version      Show version
 
@@ -22,8 +24,16 @@ Environment:
   CP_READ_PREVIEW_LINES      Lines to preview from Read (default: 5, 0=hide)
 
 Examples:
-  {CLI_NAME} -p "explain this code"
-  {CLI_NAME} -f ~/.claude/projects/.../session.jsonl""")
+  {CLI_NAME} stream -p "explain this code"
+  {CLI_NAME} show ~/.claude/projects/.../session.jsonl
+  {CLI_NAME} sessions""")
+
+
+COMMANDS = {
+    "stream": "claudecodepretty.commands.stream",
+    "show": "claudecodepretty.commands.show",
+    "sessions": "claudecodepretty.commands.sessions",
+}
 
 
 def main():
@@ -37,16 +47,18 @@ def main():
         print(__version__)
         sys.exit(0)
 
-    if "-f" in args or "--file" in args:
-        try:
-            idx = args.index("-f") if "-f" in args else args.index("--file")
-            file_path = args[idx + 1]
-            sys.exit(run_replay(file_path))
-        except IndexError:
-            print("Error: -f requires a file path")
-            sys.exit(1)
+    command = args[0]
+    sub_args = args[1:]
 
-    sys.exit(run_stream(args))
+    if command not in COMMANDS:
+        print(f"Unknown command: {command}")
+        print(f"Run '{CLI_NAME} --help' for usage")
+        sys.exit(1)
+
+    from importlib import import_module
+
+    mod = import_module(COMMANDS[command])
+    mod.run(sub_args)
 
 
 if __name__ == "__main__":

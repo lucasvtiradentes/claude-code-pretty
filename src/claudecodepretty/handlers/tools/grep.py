@@ -1,12 +1,13 @@
-from claudecodepretty.colors import PURPLE, RESET
 from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_grep(inp: dict, state: ParserState, result: ParseResult):
+    r = state.renderer
     pattern = inp.get("pattern", "")
     path = inp.get("path", "")
     if path:
         path = path.split("/")[-1]
-        result.add(f'\n{state.sp}{PURPLE}[Grep] "{pattern}" in {path}{RESET}\n')
+        label = f'[Grep] "{pattern}" in {path}'
     else:
-        result.add(f'\n{state.sp}{PURPLE}[Grep] "{pattern}"{RESET}\n')
+        label = f'[Grep] "{pattern}"'
+    result.add(f"\n{state.sp}{r.purple(label)}\n")

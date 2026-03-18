@@ -1,20 +1,20 @@
 import re
 
-from claudecodepretty.colors import DIM, GREEN, RED, RESET
 from claudecodepretty.constants import INDENT, READ_PREVIEW_LINES, TOOL_RESULT_MAX_CHARS
 from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_user_message(data: dict, state: ParserState, result: ParseResult):
+    r = state.renderer
     message = data.get("message", {})
     content = message.get("content", "")
 
     if isinstance(content, str):
         if state.mode == "replay":
             text = content[:200]
-            result.add(f"\n{GREEN}[user]{RESET} {text}")
+            result.add(f"\n{r.green('[user]')} {text}")
             if len(content) > 200:
-                result.add(f"{DIM}...{RESET}")
+                result.add(r.dim("..."))
             result.add("\n")
         return
 
@@ -32,7 +32,7 @@ def handle_user_message(data: dict, state: ParserState, result: ParseResult):
                 return
             if "<tool_use_error>" in tool_content:
                 error_msg = re.sub(r"<[^>]*>", "", tool_content)
-                result.add(f"{state.sp}{RED}{INDENT}✗ {error_msg}{RESET}\n\n")
+                result.add(f"{state.sp}{r.red(f'{INDENT}✗ {error_msg}')}\n\n")
                 return
 
             if "\n" in tool_content:
@@ -40,7 +40,7 @@ def handle_user_message(data: dict, state: ParserState, result: ParseResult):
                     return
                 lines = tool_content.split("\n")[:READ_PREVIEW_LINES]
                 for line in lines:
-                    result.add(f"{state.sp}{DIM}{INDENT}→ {line}{RESET}\n")
+                    result.add(f"{state.sp}{r.dim(f'{INDENT}→ {line}')}\n")
                 if len(tool_content.split("\n")) > READ_PREVIEW_LINES:
                     result.add(f"{state.sp}{INDENT}...\n")
                 result.add("\n")
@@ -48,4 +48,4 @@ def handle_user_message(data: dict, state: ParserState, result: ParseResult):
                 if TOOL_RESULT_MAX_CHARS == 0:
                     return
                 text = tool_content if TOOL_RESULT_MAX_CHARS < 0 else tool_content[:TOOL_RESULT_MAX_CHARS]
-                result.add(f"{state.sp}{DIM}{INDENT}→ {text}{RESET}\n\n")
+                result.add(f"{state.sp}{r.dim(f'{INDENT}→ {text}')}\n\n")

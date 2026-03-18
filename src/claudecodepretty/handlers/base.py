@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 
-from claudecodepretty.colors import BOLD, DIM, INVERSE, RESET
+from claudecodepretty.renderers.ansi import AnsiRenderer
+from claudecodepretty.renderers.base import Renderer
 
 
 @dataclass
@@ -12,9 +13,10 @@ class ParserState:
     in_bold: bool = False
     in_code: bool = False
     pending_char: str = ""
+    renderer: Renderer = field(default_factory=AnsiRenderer)
 
     def update_sp(self):
-        self.sp = "".join(f"{DIM}│{RESET} " for _ in range(self.subagent_depth))
+        self.sp = "".join(self.renderer.pipe() for _ in range(self.subagent_depth))
 
     def increment_depth(self):
         self.subagent_depth += 1
@@ -27,11 +29,11 @@ class ParserState:
 
     def _get_style(self) -> str:
         if self.in_bold and self.in_code:
-            return BOLD + INVERSE
+            return self.renderer.style_bold_code()
         if self.in_bold:
-            return BOLD
+            return self.renderer.style_bold()
         if self.in_code:
-            return INVERSE
+            return self.renderer.style_code()
         return ""
 
     def render_text(self, text: str) -> str:
@@ -46,7 +48,7 @@ class ParserState:
                 if i + 1 < len(buf):
                     if buf[i + 1] == "*":
                         self.in_bold = not self.in_bold
-                        out.append(RESET + self._get_style())
+                        out.append(self.renderer.style_reset() + self._get_style())
                         i += 2
                         continue
                     else:
@@ -57,7 +59,7 @@ class ParserState:
                     break
             elif ch == "`":
                 self.in_code = not self.in_code
-                out.append(RESET + self._get_style())
+                out.append(self.renderer.style_reset() + self._get_style())
                 i += 1
             else:
                 out.append(ch)
@@ -72,9 +74,6 @@ class ParseResult:
     messages: list[str] = field(default_factory=list)
 
     def add(self, text: str):
-        self.messages.append(text)
-
-    def add_inline(self, text: str):
         self.messages.append(text)
 
     def get_output(self) -> str:

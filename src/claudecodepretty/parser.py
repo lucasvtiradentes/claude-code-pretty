@@ -1,6 +1,5 @@
 import json
 
-from claudecodepretty.colors import RED, RESET
 from claudecodepretty.handlers import (
     ParseResult,
     ParserState,
@@ -35,6 +34,7 @@ def parse_json_line(line: str, state: ParserState) -> ParseResult:
     elif msg_type == "result":
         handle_result(data, state, result)
     elif msg_type == "error":
-        result.add(f"\n{state.sp}{RED}[error] {data.get('error', 'unknown error')}{RESET}")
+        error_msg = data.get("error", "unknown error")
+        result.add(f"\n{state.sp}{state.renderer.red(f'[error] {error_msg}')}")
 
     return result

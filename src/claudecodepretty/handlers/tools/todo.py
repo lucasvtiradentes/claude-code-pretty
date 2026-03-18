@@ -1,18 +1,18 @@
-from claudecodepretty.colors import DIM, GREEN, ORANGE, RESET, YELLOW
 from claudecodepretty.constants import INDENT
 from claudecodepretty.handlers.base import ParseResult, ParserState
 
 
 def handle_todo(inp: dict, state: ParserState, result: ParseResult):
-    result.add(f"\n{state.sp}{YELLOW}[Todo]{RESET}\n")
+    r = state.renderer
+    result.add(f"\n{state.sp}{r.yellow('[Todo]')}\n")
     for todo in inp.get("todos", []):
         status = todo.get("status", "pending")
         text = todo.get("content", "")
         if status == "completed":
-            mark = f"{GREEN}[x]{RESET}"
+            mark = r.green("[x]")
         elif status == "in_progress":
-            mark = f"{ORANGE}[~]{RESET}"
+            mark = r.orange("[~]")
         else:
-            mark = f"{DIM}[ ]{RESET}"
+            mark = r.dim("[ ]")
         result.add(f"{state.sp}{INDENT}{mark} {text}\n")
     result.add("\n")

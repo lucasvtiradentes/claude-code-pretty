@@ -10,28 +10,10 @@ def print_help():
     print(f"""{CLI_NAME} show - Replay a saved session
 
 Usage:
-  {CLI_NAME} show <file.jsonl> [options]
-
-Options:
-  --browser          Open session in browser instead of terminal
-  --port N           Port for browser server (default: 7860)
+  {CLI_NAME} show <file.jsonl>
 
 Examples:
-  {CLI_NAME} show ~/.claude/projects/.../session.jsonl
-  {CLI_NAME} show session.jsonl --browser --port 8080""")
-
-
-def _parse_port(args):
-    port = 7860
-    if "--port" in args:
-        idx = args.index("--port")
-        try:
-            port = int(args[idx + 1])
-            args = args[:idx] + args[idx + 2 :]
-        except (IndexError, ValueError):
-            print("Error: --port requires a number")
-            sys.exit(1)
-    return port, args
+  {CLI_NAME} show ~/.claude/projects/.../session.jsonl""")
 
 
 def _replay(file_path):
@@ -69,25 +51,4 @@ def run(args):
         print_help()
         sys.exit(0)
 
-    if "--browser" in args:
-        args_clean = [a for a in args if a != "--browser"]
-        port, args_clean = _parse_port(args_clean)
-
-        if not args_clean:
-            print("Error: show requires a file path")
-            sys.exit(1)
-
-        from claudecodepretty.commands.sessions.server import serve_session
-
-        file_path = args_clean[0]
-        if not os.path.exists(file_path):
-            print(f"Error: File not found: {file_path}")
-            sys.exit(1)
-        sys.exit(serve_session(file_path, port))
-
-    file_args = [a for a in args if not a.startswith("--")]
-    if not file_args:
-        print("Error: show requires a file path")
-        sys.exit(1)
-
-    sys.exit(_replay(file_args[0]))
+    sys.exit(_replay(args[0]))

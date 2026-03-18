@@ -12,8 +12,7 @@ Usage:
 
 Commands:
   stream [claude-args...]          Run claude with pretty output (forwards all args)
-  show <file.jsonl> [--browser]    Replay a saved session (.jsonl)
-  sessions [--port N]              Browse all sessions in browser
+  show <file.jsonl>                Replay a saved session (.jsonl)
 
 Options:
   -h, --help         Show this help
@@ -25,14 +24,12 @@ Environment:
 
 Examples:
   {CLI_NAME} stream -p "explain this code"
-  {CLI_NAME} show ~/.claude/projects/.../session.jsonl
-  {CLI_NAME} sessions""")
+  {CLI_NAME} show ~/.claude/projects/.../session.jsonl""")
 
 
 COMMANDS = {
     "stream": "claudecodepretty.commands.stream",
     "show": "claudecodepretty.commands.show",
-    "sessions": "claudecodepretty.commands.sessions",
 }
 
 

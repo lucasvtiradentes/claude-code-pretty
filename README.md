@@ -40,12 +40,6 @@ claudep stream --resume
 
 # show - replay a saved session in terminal
 claudep show ~/.claude/projects/.../session.jsonl
-
-# show --browser - view session in browser
-claudep show ~/.claude/projects/.../session.jsonl --browser
-
-# sessions - browse all sessions in browser
-claudep sessions
 ```
 
 Stream mode adds these flags automatically:

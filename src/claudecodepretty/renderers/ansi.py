@@ -5,7 +5,6 @@ INVERSE = "\033[7m"
 GREEN = "\033[32m"
 ORANGE = "\033[33m"
 PURPLE = "\033[35m"
-CYAN = "\033[36m"
 BLUE = "\033[34m"
 YELLOW = "\033[93m"
 DIM = "\033[90m"
@@ -32,17 +31,11 @@ class AnsiRenderer:
     def purple(self, text: str) -> str:
         return f"{PURPLE}{text}{RESET}"
 
-    def cyan(self, text: str) -> str:
-        return f"{CYAN}{text}{RESET}"
-
     def blue(self, text: str) -> str:
         return f"{BLUE}{text}{RESET}"
 
     def yellow(self, text: str) -> str:
         return f"{YELLOW}{text}{RESET}"
-
-    def code(self, text: str) -> str:
-        return f"{INVERSE}{text}{RESET}"
 
     def render_markdown(self, text: str) -> str:
         text = re.sub(r"\*\*(.+?)\*\*", rf"{BOLD}\1{RESET}", text)

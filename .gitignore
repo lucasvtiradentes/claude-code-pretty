@@ -10,3 +10,5 @@ build/
 .eggs/
 .ignore/
 tmp-*
+_branch
+.bctx/branches/

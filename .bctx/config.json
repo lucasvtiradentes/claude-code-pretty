@@ -1,0 +1,17 @@
+{
+  "sound": true,
+  "template_rules": [
+    {
+      "prefix": "feature/",
+      "template": "feature"
+    },
+    {
+      "prefix": "fix/",
+      "template": "bug"
+    },
+    {
+      "prefix": "bug/",
+      "template": "bug"
+    }
+  ]
+}

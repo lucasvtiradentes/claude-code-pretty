@@ -27,5 +27,6 @@ def run(args):
             print("Error: --port requires a number")
             sys.exit(1)
 
-    print(f"Sessions browser not yet implemented (port={port})")
-    sys.exit(1)
+    from claudecodepretty.commands.sessions.server import serve_sessions_browser
+
+    sys.exit(serve_sessions_browser(port))

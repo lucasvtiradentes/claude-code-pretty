@@ -77,8 +77,13 @@ def run(args):
             print("Error: show requires a file path")
             sys.exit(1)
 
-        print(f"Browser mode not yet implemented (file={args_clean[0]}, port={port})")
-        sys.exit(1)
+        from claudecodepretty.commands.sessions.server import serve_session
+
+        file_path = args_clean[0]
+        if not os.path.exists(file_path):
+            print(f"Error: File not found: {file_path}")
+            sys.exit(1)
+        sys.exit(serve_session(file_path, port))
 
     file_args = [a for a in args if not a.startswith("--")]
     if not file_args:
